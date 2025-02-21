@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Default;
 
-use App\Entity\Entite;
+use App\Entity\Default\Entite;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +14,11 @@ class EntiteRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Entite::class);
+    }
+
+    public function findAll(): array
+    {
+
     }
 
     //    /**

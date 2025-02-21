@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Facturation;
 
-use App\Repository\PrestationDiversConsolideRepository;
+use App\Entity\Default\Entite;
+use App\Repository\Facturation\PrestationDiversConsolideRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -16,9 +17,8 @@ class PrestationDiversConsolide
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'prestationDiversConsolides')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Entite $entite = null;
+    #[ORM\Column(type: Types::BINARY)]
+    private $uuid_entite;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $periode = null;
@@ -32,7 +32,7 @@ class PrestationDiversConsolide
     /**
      * @var Collection<int, PrestationDiversConsolidePrestation>
      */
-    #[ORM\OneToMany(targetEntity: PrestationDiversConsolidePrestation::class, mappedBy: 'prestation_divers', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: PrestationDiversConsolidePrestation::class, mappedBy: 'prestation_divers_consolide')]
     private Collection $prestationDiversConsolidePrestations;
 
     public function __construct()
@@ -45,14 +45,14 @@ class PrestationDiversConsolide
         return $this->id;
     }
 
-    public function getEntite(): ?Entite
+    public function getUuidEntite()
     {
-        return $this->entite;
+        return $this->uuid_entite;
     }
 
-    public function setEntite(?Entite $entite): static
+    public function setUuidEntite($uuid_entite): static
     {
-        $this->entite = $entite;
+        $this->uuid_entite = $uuid_entite;
 
         return $this;
     }

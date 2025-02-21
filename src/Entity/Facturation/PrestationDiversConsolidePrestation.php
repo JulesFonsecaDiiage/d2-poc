@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Facturation;
 
-use App\Repository\PrestationDiversConsolidePrestationRepository;
+use App\Repository\Facturation\PrestationDiversConsolidePrestationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,7 +15,7 @@ class PrestationDiversConsolidePrestation
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'prestationDiversConsolidePrestations')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?PrestationDiversConsolide $prestation_divers_consolide = null;
 
     #[ORM\Column]
@@ -93,5 +93,10 @@ class PrestationDiversConsolidePrestation
         $this->data = $data;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->id ? (string) $this->id : 'New';
     }
 }

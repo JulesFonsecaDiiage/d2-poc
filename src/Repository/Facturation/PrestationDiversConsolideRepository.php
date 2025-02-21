@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Facturation;
 
-use App\Entity\PrestationDiversConsolide;
+use App\Entity\Facturation\PrestationDiversConsolide;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

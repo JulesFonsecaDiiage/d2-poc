@@ -2,11 +2,8 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\PrestationDiversConsolidePrestation;
+use App\Entity\Facturation\PrestationDiversConsolidePrestation;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class PrestationDiversConsolidePrestationCrudController extends AbstractCrudController
 {

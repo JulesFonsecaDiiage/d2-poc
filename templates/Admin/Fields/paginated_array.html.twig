@@ -1,0 +1,31 @@
+{% extends '@EasyAdmin/crud/detail.html.twig' %}
+
+{% block field %}
+    {% set prestations = field.value %}
+    {% if prestations is empty %}
+        <p>Aucune prestation.</p>
+    {% else %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Quantité</th>
+                <th>Prix</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for prestation in prestations|slice(0, 10) %}
+                <tr>
+                    <td>{{ prestation.nom }}</td>
+                    <td>{{ prestation.quantite }}</td>
+                    <td>{{ prestation.prix|number_format(2, ',', ' ') }} €</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% if prestations|length > 10 %}
+            <p>Affichage des 10 premières prestations...</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}

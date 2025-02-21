@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Facturation;
 
-use App\Entity\PrestationDiversConsolidePrestation;
+use App\Entity\Facturation\PrestationDiversConsolidePrestation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<PrestationDiversConsolidePrestation>
+ * @extends ServiceEntityRepository<\App\Entity\Facturation\PrestationDiversConsolidePrestation>
  */
 class PrestationDiversConsolidePrestationRepository extends ServiceEntityRepository
 {

@@ -2,10 +2,11 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Entite;
+use App\Entity\Default\Entite;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class EntiteCrudController extends AbstractCrudController
@@ -15,14 +16,30 @@ class EntiteCrudController extends AbstractCrudController
         return Entite::class;
     }
 
-    /*
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityLabelInSingular('Entité')
+            ->setEntityLabelInPlural('Entités')
+            ->showEntityActionsInlined()
+            ;
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
+            TextField::new('name', 'Dénomination'),
+            EmailField::new('email', 'Email'),
+            BooleanField::new('active', 'Actif'),
         ];
     }
-    */
+
+    public function createEntity(string $entityFqcn): Entite
+    {
+        // On génère un UUID pour l'entité
+        $entite = new Entite();
+        $entite->setUuid(bin2hex(random_bytes(16)));
+
+        return $entite;
+    }
 }
