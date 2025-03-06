@@ -1,0 +1,3 @@
+migrations_paths:
+  'FacturationMigrations': 'migrations/facturation'
+em: facturation
