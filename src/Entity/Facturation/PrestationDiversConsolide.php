@@ -2,7 +2,6 @@
 
 namespace App\Entity\Facturation;
 
-use App\Entity\Default\Entite;
 use App\Repository\Facturation\PrestationDiversConsolideRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -45,8 +44,12 @@ class PrestationDiversConsolide
         return $this->id;
     }
 
-    public function getUuidEntite()
+    public function getUuidEntite(): ?string
     {
+        if (is_resource($this->uuid_entite)) {
+            return stream_get_contents($this->uuid_entite);
+        }
+
         return $this->uuid_entite;
     }
 

@@ -33,6 +33,10 @@ class Entite
 
     public function getUuid()
     {
+        if (is_resource($this->uuid)) {
+            return stream_get_contents($this->uuid);
+        }
+
         return $this->uuid;
     }
 
