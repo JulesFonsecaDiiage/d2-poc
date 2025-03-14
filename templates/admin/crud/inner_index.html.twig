@@ -1,0 +1,88 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var admin_context \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var entities \EasyCorp\Bundle\EasyAdminBundle\Collection\EntityDtoCollection #}
+{# @var paginator \EasyCorp\Bundle\EasyAdminBundle\Orm\EntityPaginator #}
+{# @var admin_context \EasyCorp\Bundle\EasyAdminBundle\Orm\AdminContext local admin context #}
+{% trans_default_domain admin_context.i18n.translationDomain %}
+
+{# sort can be multiple; let's consider the sorting field the first one #}
+{% set sort_field_name = app.request.get('sort')|keys|first %}
+{% set some_results_are_hidden = false %}
+{% set has_footer = false %}
+
+<div class="content-panel">
+    <div class="content-panel-body with-rounded-top with-min-h-250 without-padding {{ not has_footer ? 'without-footer' }}">
+        <table class="table datagrid with-rounded-top {{ not has_footer ? 'with-rounded-bottom' }}">
+            <thead>
+            {% block table_head %}
+                <tr>
+                    {% set ea_sort_asc = constant('EasyCorp\\Bundle\\EasyAdminBundle\\Config\\Option\\SortOrder::ASC') %}
+                    {% set ea_sort_desc = constant('EasyCorp\\Bundle\\EasyAdminBundle\\Config\\Option\\SortOrder::DESC') %}
+                    {% for field in entities|first.fields ?? [] %}
+                        {% set is_sorting_field = admin_context.search.isSortingField(field.property) %}
+                        {% set next_sort_direction = is_sorting_field ? (admin_context.search.sortDirection(field.property) == ea_sort_desc ? ea_sort_asc : ea_sort_desc) : ea_sort_desc %}
+                        {% set column_icon = is_sorting_field ? (next_sort_direction == ea_sort_desc ? 'fa-arrow-up' : 'fa-arrow-down') : 'fa-sort' %}
+
+                        {% if field.templatePath %}
+                            <th class="js-sort {{ is_sorting_field ? 'sorted' }} {{ field.isVirtual ? 'field-virtual' }} text-{{ field.textAlign }}" dir="{{ admin_context.i18n.textDirection }}">
+                                {% if field.isSortable %}
+                                    <a href="{{ ea_url({ page: 1, sort: { (field.property): next_sort_direction } }).includeReferrer() }}">
+                                        {{ field.label|raw }} <i class="fa fa-fw {{ column_icon }}"></i>
+                                    </a>
+                                {% else %}
+                                    <span>{{ field.label|raw }}</span>
+                                {% endif %}
+                            </th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endblock table_head %}
+            </thead>
+
+            <tbody>
+            {% block table_body %}
+                {% for entity in entities %}
+                    {% if not entity.isAccessible %}
+                        {% set some_results_are_hidden = true %}
+                    {% else %}
+                        <tr data-id="{{ entity.primaryKeyValueAsString }}">
+
+                            {% for field in entity.fields %}
+                                {% if field.templatePath %}
+                                    <td class="{{ field.property == sort_field_name ? 'sorted' }} text-{{ field.textAlign }} {{ field.cssClass }}" dir="{{ admin_context.i18n.textDirection }}">
+                                        {{ include(field.templatePath, { field: field, entity: entity, admin_context: admin_context }, with_context = false) }}
+                                    </td>
+                                {% endif %}
+                            {% endfor %}
+
+                        </tr>
+
+                    {% endif %}
+                {% else %}
+                    <tr>
+                        <td class="no-results" colspan="100">
+                            {{ 'datagrid.no_results'|trans(admin_context.i18n.translationParameters, 'EasyAdminBundle') }}
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                {% if some_results_are_hidden %}
+                    <tr class="datagrid-row-empty">
+                        <td class="text-center" colspan="{{ entities|first.fields|length + 1 }}">
+                            <span class="datagrid-row-empty-message"><i class="fa fa-lock mr-1"></i> {{ 'datagrid.hidden_results'|trans({}, 'EasyAdminBundle') }}</span>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endblock table_body %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if entities|length > 0 %}
+        <div class="content-panel-footer without-padding without-border">
+            {% block paginator %}
+                {{ include(admin_context.templatePath('crud/paginator')) }}
+            {% endblock paginator %}
+        </div>
+    {% endif %}
+</div>

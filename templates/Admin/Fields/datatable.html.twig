@@ -1,0 +1,50 @@
+{% extends ea.templatePath('layout') %}
+{% if value is not empty %}
+    <table class="table datatable">
+        <thead>
+        <tr>
+            {% for column in field.customOptions.columns %}
+                <th>{{ column.label }}</th>
+            {% endfor %}
+            {% if field.customOptions.actions is defined %}
+                <th>Actions</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in value %}
+            <tr>
+                {% for column in field.customOptions.columns %}
+                    <td>{{ attribute(item, column.property) }}</td>
+                {% endfor %}
+                {% if field.customOptions.actions is defined %}
+                    <td>
+                        {% for action in field.customOptions.actions %}
+                            <a href="{{ path(action.route, { id: item.id }) }}" class="btn btn-sm btn-{{ action.style|default('primary') }}">
+                                {{ action.label }}
+                            </a>
+                        {% endfor %}
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Aucune donnée disponible.</p>
+{% endif %}
+
+{% block head_stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+{% endblock %}
+
+{% block body_javascript %}
+    {{ parent() }}
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.datatable').DataTable();
+        });
+    </script>
+{% endblock %}

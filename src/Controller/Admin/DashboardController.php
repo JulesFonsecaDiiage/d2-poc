@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\DTO\EntiteDto;
 use App\Entity\Default\Entite;
 use App\Entity\Facturation\PrestationDiversConsolide;
+use App\Entity\Facturation\PrestationDiversConsolidePrestation;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -41,7 +42,8 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::section('Facturation');
         yield MenuItem::subMenu('Prestations', 'fas fa-money-bill')->setSubItems([
-            MenuItem::linkToCrud('Divers', null, PrestationDiversConsolide::class),
+            MenuItem::linkToCrud('Divers (Consolidations)', null, PrestationDiversConsolide::class),
+            MenuItem::linkToCrud('Divers (Prestations)', null, PrestationDiversConsolidePrestation::class),
         ]);
     }
 
@@ -82,6 +84,8 @@ class DashboardController extends AbstractDashboardController
     public function configureCrud(): Crud
     {
         return Crud::new()
-            ->showEntityActionsInlined();
+            ->showEntityActionsInlined()
+            ->overrideTemplate('crud/detail', 'admin/crud/detail.html.twig')
+        ;
     }
 }

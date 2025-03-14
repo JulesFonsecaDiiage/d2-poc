@@ -1,0 +1,71 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var context \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
+{#{% extends ea.templatePath('crud/detail') %}#}
+{% extends '@!EasyAdmin/crud/detail.html.twig' %}
+
+{% block detail_field %}
+    {% if not is_decoration_field %}
+        {{ _self.render_field(entity, field, row_number) }}
+    {% endif %}
+{% endblock %}
+
+
+{% macro render_field(entity, field, row_number) %}
+    <div class="data-row {{ row_number is even ? 'with-background' }} {{ field.cssClass }}">
+
+        {% if field.label is not empty or field.help is not empty %}
+        <dd>
+            {{ field.label|raw }}
+
+            {% if field.help is not empty %}
+                <span class="data-help">
+                    <i class="far fa-question-circle" data-toggle="tooltip" title="{{ field.help|e('html_attr') }}"></i>
+                </span>
+            {% endif %}
+        </dd>
+        {% endif %}
+
+        <dt class="w-100">
+            {{ include(field.templatePath, { field: field, entity: entity }, with_context = false) }}
+        </dt>
+    </div>
+{% endmacro %}
+
+{% block body_javascript %}
+    {{ parent() }}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            function pullContentAndRedraw(href, $clickedElement)
+            {
+                let $block = $clickedElement.closest('.content-panel').parent();
+
+                $.get(href, function (response) {
+                    $block.html(response);
+                });
+            }
+
+            $('.ea')
+                .on('click', '.page-link', function(e) {
+                    e.preventDefault();
+
+                    let $this = $(this);
+                    let href = $this.attr('href');
+                    console.log('Page link clicked', href);
+
+                    pullContentAndRedraw(href, $this);
+                })
+                .on('click', '.js-sort a', function(e) {
+                    e.preventDefault();
+
+                    let $this = $(this);
+                    let href = $this.attr('href');
+                    console.log('Sort link clicked', href);
+
+                    pullContentAndRedraw(href, $this);
+                });
+        });
+    </script>
+{% endblock %}

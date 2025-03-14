@@ -46,6 +46,20 @@ class CustomEntityFilter implements FilterInterface
         return $this;
     }
 
+    public function setClass(string $class): self
+    {
+        $this->dto->setFormTypeOption('value_type_options', ['class' => $class]);
+
+        return $this;
+    }
+
+    public function setFilterField($filter_field): self
+    {
+        $this->filter_field = $filter_field;
+
+        return $this;
+    }
+
     public function apply(QueryBuilder $queryBuilder, FilterDataDto $filterDataDto, ?FieldDto $fieldDto, EntityDto $entityDto): void
     {
         $alias = $filterDataDto->getEntityAlias();
@@ -157,13 +171,6 @@ class CustomEntityFilter implements FilterInterface
         }
 
         return $parameterValue;
-    }
-
-    public function setFilterField($filter_field): self
-    {
-        $this->filter_field = $filter_field;
-
-        return $this;
     }
 
     private function getFilterField()
