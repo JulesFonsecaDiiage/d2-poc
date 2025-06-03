@@ -4,8 +4,10 @@ namespace App\Controller\Admin;
 
 use App\DTO\EntiteDto;
 use App\Entity\Default\Entite;
+use App\Entity\Default\Produit;
 use App\Entity\Facturation\PrestationDiversConsolide;
 use App\Entity\Facturation\PrestationDiversConsolidePrestation;
+use App\Repository\Default\EntiteRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -18,9 +20,17 @@ use Symfony\Component\HttpFoundation\Response;
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
 {
+    public function __construct(private EntiteRepository $entiteRepository) {}
+
     public function index(): Response
     {
-        return $this->render('admin/dashboard.html.twig');
+        $users = $this->entiteRepository->findBy([], ['created_at' => 'DESC'], 10);
+        $nbActiveUsers = $this->entiteRepository->count(['active' => true]);
+
+        return $this->render('admin/dashboard.html.twig', [
+            'users' => $users,
+            'nbActiveUsers' => $nbActiveUsers,
+        ]);
     }
 
     public function configureDashboard(): Dashboard
@@ -45,6 +55,8 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Divers (Consolidations)', null, PrestationDiversConsolide::class),
             MenuItem::linkToCrud('Divers (Prestations)', null, PrestationDiversConsolidePrestation::class),
         ]);
+
+        yield MenuItem::linkToCrud('Produits', 'fas fa-box', Produit::class);
     }
 
     public function configureActions(): Actions

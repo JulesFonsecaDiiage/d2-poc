@@ -3,8 +3,6 @@
 namespace App\DataFixtures;
 
 use App\Entity\Default\Entite;
-use App\Entity\Facturation\PrestationDiversConsolide;
-use App\Entity\Facturation\PrestationDiversConsolidePrestation;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -28,6 +26,7 @@ class EntiteFixtures extends Fixture implements FixtureGroupInterface
             $entite->setEmail($this->faker->companyEmail);
             $entite->setActive($this->faker->boolean);
             $entite->setUuid($this->faker->uuid);
+            $entite->setCreatedAt($this->faker->dateTimeBetween('-1 year'));
 
             $manager->persist($entite);
         }

@@ -11,7 +11,7 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
 
 - PHP 8.1 ou supérieur
 - Composer (gestionnaire de dépendances PHP)
-- Symfony CLI (optionnel, mais recommandé)
+- Symfony CLI
 - MySQL/MariaDB ou tout autre SGBD pris en charge par Doctrine
 
 ## Installation

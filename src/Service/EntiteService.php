@@ -14,7 +14,7 @@ class EntiteService
         private PrestationDiversConsolidePrestationRepository $prestationDiversConsolidePrestationRepository
     ) {}
 
-    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null)
     {
         $data = [];
 

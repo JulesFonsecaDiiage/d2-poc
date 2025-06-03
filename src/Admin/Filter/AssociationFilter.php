@@ -29,8 +29,8 @@ class AssociationFilter implements FilterInterface
      */
     public static function new(
         string $propertyName,
-        string $label = null,
-        string $associationProperty = null
+        ?string $label = null,
+        ?string $associationProperty = null
     ): self {
 
         if (!$associationProperty) {
