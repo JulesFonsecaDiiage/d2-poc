@@ -17,6 +17,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Factory\EntityFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Factory\FilterFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Factory\PaginatorFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 use function is_string;
@@ -55,14 +56,13 @@ abstract class AbstractAdminCrudController extends AbstractCrudController
      */
     public function listHtml(AdminContext $context): Response
     {
-        dump($context);
-        dump($context->getRequest()->query->all());
-
         // Si le contexte ou le Crud est null, reconstruire le contexte
+        /** @var RequestStack $requestStack */
+        $requestStack = $this->container->get('request_stack');
+        $request = $requestStack->getCurrentRequest();
         if (!$context || !$context->getCrud()) {
-            $request = $this->container->get('request_stack')->getCurrentRequest();
             $dashboardController = $this->container->get(ControllerFactory::class)
-                ->getDashboardControllerInstance(DashboardController::class, $request);
+                ->getDashboardControllerInstance($request->attributes->get(EA::DASHBOARD_CONTROLLER_FQCN) ?? DashboardController::class, $request);
 
             $crudController = $this->container->get(ControllerFactory::class)
                 ->getCrudControllerInstance(
@@ -73,9 +73,10 @@ abstract class AbstractAdminCrudController extends AbstractCrudController
 
             $context = $this->container->get(AdminContextFactory::class)
                 ->create($request, $dashboardController, $crudController);
-        }
 
-        dump($context);
+            $request->attributes->set(EA::CONTEXT_REQUEST_ATTRIBUTE, $context);
+            $request->attributes->set(EA::CONTEXT_NAME, $context);
+        }
 
         $context->getCrud()->setPageName(self::PAGE_LIST_HTML);
 

@@ -5,6 +5,7 @@ namespace App\Admin\Field\Configurator;
 use App\Admin\Field\ControllerIndexField;
 use App\Controller\Admin\AbstractAdminCrudController;
 use App\Controller\Admin\DashboardController;
+use App\Controller\Admin\PrestationDiversConsolidePrestationCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Option\EA;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldConfiguratorInterface;
@@ -44,6 +45,9 @@ class ControllerIndexConfigurator implements FieldConfiguratorInterface
         /** @var Request $request */
         $request = $field->getCustomOption(ControllerIndexField::OPT_REQUEST);
         $pageSize = $field->getCustomOption(ControllerIndexField::OPT_PAGE_SIZE) ?? 15;
+
+        $request->attributes->set(EA::DASHBOARD_CONTROLLER_FQCN, DashboardController::class);
+        $request->query->set(EA::CRUD_CONTROLLER_FQCN, PrestationDiversConsolidePrestationCrudController::class);
 
         if (!$request->query->has(ControllerIndexField::OPT_PAGE_SIZE)) {
             $request->query->set(ControllerIndexField::OPT_PAGE_SIZE, $pageSize);
@@ -90,11 +94,8 @@ class ControllerIndexConfigurator implements FieldConfiguratorInterface
         // cause current context is setting up for parent controller (detail page)
         $adminContext = $this->adminContextFactory->create($request, $dashboardController, $crudController);
         $adminContext->getCrud()->setPageName(AbstractAdminCrudController::PAGE_LIST_HTML);
-        dump($adminContext);
 
         $request->attributes->set(EA::CONTEXT_REQUEST_ATTRIBUTE, $adminContext);
-
-        dump($request->query->all());
         $response = $crudController->listHtml($adminContext);
 
         $this->requestStack->pop();
