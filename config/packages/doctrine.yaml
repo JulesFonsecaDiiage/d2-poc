@@ -14,15 +14,15 @@ doctrine:
             default:
                 connection: default
                 mappings:
-                    App:
+                    Default:
                         is_bundle: false
                         dir: '%kernel.project_dir%/src/Entity/Default'
                         prefix: 'App\Entity\Default'
-                        alias: App
+                        alias: Default
             facturation:
                 connection: facturation
                 mappings:
-                    App:
+                    Facturation:
                         is_bundle: false
                         dir: '%kernel.project_dir%/src/Entity/Facturation'
                         prefix: 'App\Entity\Facturation'

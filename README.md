@@ -64,6 +64,7 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
 ## Informations Utiles
 
 - **Commandes personnalisées :**
+  - `php bin/console app:make:entity` : Permet de générer les entités
   - `php bin/console app:migrations:diff` : Permet de générer les migrations
   - `php bin/console app:migrations:migrate` : Permet d'exécuter les migrations
   - `php bin/console app:fixtures` : Charge les fixtures de toutes les bases de données
