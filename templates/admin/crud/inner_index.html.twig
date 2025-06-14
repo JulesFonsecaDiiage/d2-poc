@@ -33,6 +33,7 @@
                                     <span>{{ field.label|raw }}</span>
                                 {% endif %}
                             </th>
+                            <th class="text-right actions">{{ 'label.actions'|trans({}, 'EasyAdminBundle') }}</th>
                         {% endif %}
                     {% endfor %}
                 </tr>
@@ -53,6 +54,12 @@
                                         {{ include(field.templatePath, { field: field, entity: entity, admin_context: admin_context }, with_context = false) }}
                                     </td>
                                 {% endif %}
+
+                                <td class="text-right actions">
+                                    {% for action in entity.actions %}
+                                        {{ include(action.templatePath, { action: action, entity: entity, admin_context: admin_context }, with_context = false) }}
+                                    {% endfor %}
+                                </td>
                             {% endfor %}
 
                         </tr>

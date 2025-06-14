@@ -3,7 +3,10 @@
 namespace App\Controller\Admin;
 
 use App\Admin\Field\ControllerIndexField;
+use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminAction;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Option\EA;
@@ -26,6 +29,14 @@ abstract class AbstractAdminCrudController extends AbstractCrudController
 {
     public const PAGE_LIST_HTML = 'listHtml';
     public const ACTION_LIST_HTML = 'listHtml';
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->add(AbstractAdminCrudController::PAGE_LIST_HTML, Action::DETAIL)
+            ->add(AbstractAdminCrudController::PAGE_LIST_HTML, Action::DELETE)
+            ->add(AbstractAdminCrudController::PAGE_LIST_HTML, Action::EDIT);
+    }
 
     public static function getSubscribedServices(): array
     {
@@ -54,6 +65,7 @@ abstract class AbstractAdminCrudController extends AbstractCrudController
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
+    #[AdminAction(routePath: '/list-html', routeName: self::ACTION_LIST_HTML)]
     public function listHtml(AdminContext $context): Response
     {
         // Si le contexte ou le Crud est null, reconstruire le contexte
@@ -90,6 +102,7 @@ abstract class AbstractAdminCrudController extends AbstractCrudController
 
         $entities = $this->container->get(EntityFactory::class)->createCollection($context->getEntity(), $paginator->getResults());
         $this->container->get(EntityFactory::class)->processFieldsForAll($entities, $fields);
+        $this->container->get(EntityFactory::class)->processActionsForAll($entities, $context->getCrud()->getActionsConfig());
 
         $templateParameters = [
             // new context should be passed to twig here cause easy admin passes only globally context from container as ea variable
