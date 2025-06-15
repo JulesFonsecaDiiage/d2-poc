@@ -3,6 +3,8 @@
 namespace App\Entity\Default;
 
 use App\Repository\Default\EntiteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,6 +30,17 @@ class Entite
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
+
+    /**
+     * @var Collection<int, Expedition>
+     */
+    #[ORM\OneToMany(targetEntity: Expedition::class, mappedBy: 'entity')]
+    private Collection $expeditions;
+
+    public function __construct()
+    {
+        $this->expeditions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -100,5 +113,35 @@ class Entite
     public function __toString(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection<int, Expedition>
+     */
+    public function getExpeditions(): Collection
+    {
+        return $this->expeditions;
+    }
+
+    public function addExpedition(Expedition $expedition): static
+    {
+        if (!$this->expeditions->contains($expedition)) {
+            $this->expeditions->add($expedition);
+            $expedition->setEntity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExpedition(Expedition $expedition): static
+    {
+        if ($this->expeditions->removeElement($expedition)) {
+            // set the owning side to null (unless already changed)
+            if ($expedition->getEntity() === $this) {
+                $expedition->setEntity(null);
+            }
+        }
+
+        return $this;
     }
 }
