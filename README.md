@@ -12,7 +12,7 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
 - PHP 8.1 ou supérieur
 - Composer (gestionnaire de dépendances PHP)
 - Symfony CLI
-- MySQL/MariaDB ou tout autre SGBD pris en charge par Doctrine
+- SQL Server
 
 ## Installation
 
@@ -30,13 +30,14 @@ Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur 
     ```
    
 3. **Configurer les bases de données :**
+    - Copiez le fichier `.env` en `.env.local` et modifiez les paramètres de connexion à la base de données.
 
     ```dotenv
     # Base de données principale (default)
-    DATABASE_URL="mysql://user:password@127.0.0.1:3306/default_db?serverVersion=mariadb-10.6.8&charset=utf8mb4"
+    DATABASE_URL="sqlsrv://user:password@localhost:1433/poc_diiage?serverVersion=15&charset=UTF-8"
 
     # Base de données de facturation
-    DATABASE_URL_FACTURATION="mysql://user:password@127.0.0.1:3306/facturation_db?serverVersion=mariadb-10.6.8&charset=utf8mb4"
+    DATABASE_URL_FACTURATION="sqlsrv://user:password@localhost:1433/poc_diiage_facturation?serverVersion=15&charset=UTF-8"
     ```
    
 4. **Exécuter les migrations :**
