@@ -20,7 +20,7 @@ class EntiteFixtures extends Fixture implements FixtureGroupInterface
 
     public function load(ObjectManager $manager): void
     {
-        for ($i = 0; $i < 200; ++$i) {
+        for ($i = 0; $i < 10000; ++$i) {
             $entite = new Entite();
             $entite->setName($this->faker->company);
             $entite->setEmail($this->faker->companyEmail);

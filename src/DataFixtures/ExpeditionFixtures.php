@@ -25,7 +25,7 @@ class ExpeditionFixtures extends Fixture implements FixtureGroupInterface
     public function load(ObjectManager $manager): void
     {
         // Expeditions
-        for ($i = 0; $i < 1000; ++$i) {
+        for ($i = 0; $i < 50000; ++$i) {
             $defaultManager = $this->managerRegistry->getManager('default'); // Prend l'EM "default"
             $entite = $defaultManager->getRepository(Entite::class)->findBy([], null, 1, $this->faker->numberBetween(0,199))[0]; // Récupère une entité
 
@@ -33,7 +33,7 @@ class ExpeditionFixtures extends Fixture implements FixtureGroupInterface
             $expedition->setCode(strtoupper($this->faker->unique()->bothify('EXP-######??')));
             $expedition->setEntity($entite);
             $expedition->setTotal($this->faker->randomFloat(2, 100, 10000));
-            $expedition->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 year')));
+            $expedition->setCreatedAt(\DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-5 year')));
 
             $manager->persist($expedition);
             $this->addReference(Expedition::class . '_' . $i, $expedition);

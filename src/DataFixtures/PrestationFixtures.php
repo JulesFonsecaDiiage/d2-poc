@@ -26,9 +26,9 @@ class PrestationFixtures extends Fixture implements FixtureGroupInterface
     public function load(ObjectManager $manager): void
     {
         // PrestationDiversConsolides
-        for ($i = 0; $i < 50; ++$i) {
+        for ($i = 0; $i < 10000; ++$i) {
             $defaultManager = $this->managerRegistry->getManager('default'); // Prend l'EM "default"
-            $entite = $defaultManager->getRepository(Entite::class)->findBy([], null, 1, $this->faker->numberBetween(0,199))[0]; // Récupère une entité
+            $entite = $defaultManager->getRepository(Entite::class)->findBy([], null, 1, $this->faker->numberBetween(0,9999))[0]; // Récupère une entité
 
             $prestationDiversConsolide = new PrestationDiversConsolide();
             $prestationDiversConsolide->setUuidEntite($entite->getUuid());
@@ -39,8 +39,8 @@ class PrestationFixtures extends Fixture implements FixtureGroupInterface
         }
 
         // PrestationDiversConsolidesPrestations
-        for ($i = 0; $i < 1000; ++$i) {
-            $prestationDiversConsolide = $this->getReference(PrestationDiversConsolide::class . '_' . $this->faker->numberBetween(0, 49), PrestationDiversConsolide::class);
+        for ($i = 0; $i < 100000; ++$i) {
+            $prestationDiversConsolide = $this->getReference(PrestationDiversConsolide::class . '_' . $this->faker->numberBetween(0, 9999), PrestationDiversConsolide::class);
 
             $prestationDiversConsolidePrestation = new PrestationDiversConsolidePrestation();
             $prestationDiversConsolidePrestation->setPrestationDiversConsolide($prestationDiversConsolide);
